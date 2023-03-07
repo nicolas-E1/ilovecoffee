@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { Coffee } from './entities/coffee.entity';
 
 @Injectable()
@@ -25,6 +26,8 @@ export class CoffeesService {
   }
 
   create(createCoffeeDto: any) {
+    console.log(createCoffeeDto instanceof CreateCoffeeDto);
+
     this.coffees.push(createCoffeeDto);
     return createCoffeeDto;
   }
