@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Injectable, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CoffeesController } from './coffees.controller';
 import { CoffeesService } from './coffees.service';
@@ -7,24 +7,26 @@ import { Flavour } from './entities/flavour.entity';
 import { Event } from '../events/entities/event.entity';
 import { COFFEE_BRANDS } from './coffees.constants';
 
-// "useClass" syntax example
-class ConfigService {}
-class DevelopmentConfigService {}
-class ProductionConfigService {}
+@Injectable()
+export class CoffeeBrandsFactory {
+  create() {
+    /* . do something ..*/
+    return ['Bonafide', 'Cabrales'];
+  }
+}
 
 @Module({
   imports: [TypeOrmModule.forFeature([Coffee, Flavour, Event])],
   controllers: [CoffeesController],
   providers: [
     CoffeesService,
+    CoffeeBrandsFactory,
     {
-      provide: ConfigService,
-      useClass:
-        process.env.NODE_ENV === 'development'
-          ? DevelopmentConfigService
-          : ProductionConfigService,
+      provide: COFFEE_BRANDS,
+      useFactory: (brandsFactory: CoffeeBrandsFactory) =>
+        brandsFactory.create(),
+      inject: [CoffeeBrandsFactory],
     },
-    { provide: COFFEE_BRANDS, useValue: ['Moccona', 'Nescafe'] },
   ],
   exports: [CoffeesService],
 })
