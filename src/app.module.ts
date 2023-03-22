@@ -6,22 +6,15 @@ import { CoffeesModule } from './coffees/coffees.module';
 import { CoffeeRatingModule } from './coffee-rating/coffee-rating.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DatabaseModule } from './database/database.module';
+import Joi from '@hapi/joi';
 
 @Module({
   imports: [
-    /**
-     * To specify another path for this file,
-     * let’s pass in an options object into the forRoot() method
-     * and set the envFilePath property like so:
-     * In this example, we’re looking instead for a .environment file.
-     */
     ConfigModule.forRoot({
-      envFilePath: '.environment',
-      /**
-       * Have ConfigModule *ignore* .env files
-       * Useful when using Provider UI's such as Heroku, etc (and they handle all ENV variables)
-       */
-      ignoreEnvFile: true,
+      validationSchema: Joi.object({
+        DATABASE_HOST: Joi.required(),
+        DATABASE_PORT: Joi.number().default(5432),
+      }),
     }),
     CoffeesModule,
     CoffeeRatingModule,
