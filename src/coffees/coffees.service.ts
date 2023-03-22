@@ -9,6 +9,7 @@ import { Flavour } from './entities/flavour.entity';
 import { Event } from '../events/entities/event.entity';
 import { COFFEE_BRANDS } from './coffees.constants';
 import { ConfigService } from '@nestjs/config';
+import { DatabaseModule } from 'src/database/database.module';
 
 @Injectable()
 export class CoffeesService {
@@ -21,10 +22,7 @@ export class CoffeesService {
     private readonly configService: ConfigService,
     @Inject(COFFEE_BRANDS) coffeeBrands: string[],
   ) {
-    const databaseHost = this.configService.get<string>(
-      'DATABASE_HOST',
-      'localhost',
-    );
+    const databaseHost = this.configService.get('database.host', 'localhost');
     console.log(`🐘 Database Host: ${databaseHost}`);
     console.log(`🏭 Factory Providers Example: ${coffeeBrands}`);
   }
