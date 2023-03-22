@@ -22,7 +22,7 @@
 git clone https://github.com/nicolasbracigliano/ilovecoffee.git
 ```
 
-2.Install the dependencies.
+2. Install the dependencies.
 ```bash
 $ yarn install
 ```
