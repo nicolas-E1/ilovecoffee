@@ -8,6 +8,8 @@ import { Coffee } from './entities/coffee.entity';
 import { Flavour } from './entities/flavour.entity';
 import { Event } from '../events/entities/event.entity';
 import { COFFEE_BRANDS } from './coffees.constants';
+import { ConfigType } from '@nestjs/config';
+import coffeesConfig from './config/coffees.config';
 
 @Injectable()
 export class CoffeesService {
@@ -17,9 +19,14 @@ export class CoffeesService {
     @InjectRepository(Flavour)
     private readonly flavourRepository: Repository<Flavour>,
     private readonly dataSource: DataSource,
+    @Inject(coffeesConfig.KEY)
+    private readonly coffeesConfiguration: ConfigType<typeof coffeesConfig>,
     @Inject(COFFEE_BRANDS) coffeeBrands: string[],
   ) {
-    console.log(coffeeBrands);
+    console.log(
+      `⚙️ Coffees Configuration - Single Origin: ${coffeesConfiguration.singleOrigin}`,
+    );
+    console.log(`🏭 Factory Providers Example: ${coffeeBrands}`);
   }
 
   findAll(paginationQuery: PaginationQueryDto) {
